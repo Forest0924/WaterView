@@ -224,7 +224,7 @@ public class WaterView extends FrameLayout {
                 }
             });
             //随机设置view动画的方向
-            view.setTag(R.string.isUp, mRandom.nextBoolean());
+            view.setTag(ISUP, mRandom.nextBoolean());
             setChildViewLocation(view);
             mViews.add(view);
             addShowViewAnimation(view);
@@ -259,7 +259,7 @@ public class WaterView extends FrameLayout {
             Toast.makeText(getContext(), "当前点击的是：" + waterTag.getName() + "水滴的值是:"
                     + waterTag.getNumber() + "总的水滴数是" + mTotalConsumeWater, Toast.LENGTH_SHORT).show();
         }
-        view.setTag(R.string.original_y, view.getY());
+        view.setTag(OY, view.getY());
         animRemoveView(view);
     }
 
@@ -271,7 +271,7 @@ public class WaterView extends FrameLayout {
     private void setChildViewLocation(View view) {
         view.setX((float) (maxX * getX_YRandom(mXCurrentCanShoseRandoms, mXRandoms)));
         view.setY((float) (maxY * getX_YRandom(mYCurrentCanShoseRandoms, mYRandoms)));
-        view.setTag(R.string.original_y, view.getY());
+        view.setTag(OY, view.getY());
     }
 
     /**
@@ -309,7 +309,7 @@ public class WaterView extends FrameLayout {
      */
     private void setSpd(View view) {
         float spd = mSpds.get(mRandom.nextInt(mSpds.size()));
-        view.setTag(R.string.spd, spd);
+        view.setTag(SPD, spd);
     }
 
     /**
