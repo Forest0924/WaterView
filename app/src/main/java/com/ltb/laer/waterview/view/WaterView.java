@@ -42,6 +42,9 @@ import java.util.Random;
  *     ->界面销毁时停止调用handler避免内存泄漏，空指针等异常
  */
 public class WaterView extends FrameLayout {
+    private static final int SPD = R.string.speed//速度
+    private static final int OY = R.string.originalY//起始Y值
+    private static final int ISUP = R.string.isUp//当前方向
     private static final int WHAT_ADD_PROGRESS = 1;
     /**
      * view变化的y抖动范围
@@ -66,13 +69,15 @@ public class WaterView extends FrameLayout {
     /**
      * x最多可选取的随机数值
      */
-    private static final List<Float> X_MAX_CHOSE_RANDOMS = Arrays.asList(
-            0.01f, 0.05f, 0.1f, 0.6f, 0.11f, 0.16f, 0.21f, 0.26f, 0.31f, 0.7f, 0.75f, 0.8f, 0.85f, 0.87f);
+    private static final List<Float> X_MAX_CHOSE_RANDOMS = Arrays.asList(//增大中间部分机率
+           0.51f, 0.45f, 0.48f, 0.6f, 0.11f, 0.39f, 0.21f, 0.26f, 0.31f,
+            0.7f, 0.75f, 0.8f, 0.85f, 0.67f);
     /**
      * y最多可选取的随机数值
      */
-    private static final List<Float> Y_MAX_CHOSE_RANDOMS = Arrays.asList(
-            0.01f, 0.06f, 0.11f, 0.17f, 0.23f, 0.29f, 0.35f, 0.41f, 0.47f, 0.53f, 0.59f, 0.65f, 0.71f, 0.77f, 0.83f);
+    private static final List<Float> Y_MAX_CHOSE_RANDOMS = Arrays.asList(//增大中间部分机率
+            0.31f, 0.49f, 0.11f, 0.17f, 0.23f, 0.29f, 0.35f, 0.41f, 0.47f,
+            0.53f, 0.59f, 0.65f, 0.69f, 0.77f, 0.55f);
     /**
      * x坐标当前可选的随机数组
      */
@@ -215,6 +220,7 @@ public class WaterView extends FrameLayout {
                 @Override
                 public void onClick(View view) {
                     handViewClick(view);
+                    //todo 监听回调添加移除网络操作
                 }
             });
             //随机设置view动画的方向
@@ -313,11 +319,11 @@ public class WaterView extends FrameLayout {
         for (int i = 0; i < mViews.size(); i++) {
             View view = mViews.get(i);
             //拿到上次view保存的速度
-            float spd = (float) view.getTag(R.string.spd);
+            float spd = (float) view.getTag(SPD);
             //水滴初始的位置
-            float original = (float) view.getTag(R.string.original_y);
+            float original = (float) view.getTag(OY);
             float step = spd;
-            boolean isUp = (boolean) view.getTag(R.string.isUp);
+            boolean isUp = (boolean) view.getTag(ISUP);
             float translationY;
             //根据水滴tag中的上下移动标识移动view
             if (isUp) {
@@ -328,12 +334,12 @@ public class WaterView extends FrameLayout {
             //对水滴位移范围的控制
             if (translationY - original > CHANGE_RANGE) {
                 translationY = original + CHANGE_RANGE;
-                view.setTag(R.string.isUp, true);
+                view.setTag(ISUP, true);
             } else if (translationY - original < -CHANGE_RANGE) {
                 translationY = original - CHANGE_RANGE;
                 // FIXME:每次当水滴回到初始点时再一次设置水滴的速度，从而达到时而快时而慢
                 setSpd(view);
-                view.setTag(R.string.isUp, false);
+                view.setTag(ISUP, false);
             }
             view.setY(translationY);
         }
@@ -384,6 +390,7 @@ public class WaterView extends FrameLayout {
             public void onAnimationEnd(Animator animation) {
                 //结束时从容器移除水滴
                 removeView(view);
+                //todo 窗口判空，添加额外操作
             }
         });
         animator.start();
